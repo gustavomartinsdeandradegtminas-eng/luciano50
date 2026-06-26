@@ -845,7 +845,7 @@ var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: r
       if(!window.__festaConfete && (new Date() <= fimDia)){ window.__festaConfete = true; festejar(160); }
       return;
     }
-    roll(cDias, c.dias); roll(cHoras, pad(c.horas)); roll(cMin, pad(c.min)); setCur(cSeg, pad(c.seg));
+    roll(cDias, c.dias); roll(cHoras, pad(c.horas)); roll(cMin, pad(c.min)); roll(cSeg, pad(c.seg));
   }
 
   var liveAtivo = false;
