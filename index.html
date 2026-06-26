@@ -70,6 +70,18 @@
     50%    { transform:translateY(7px); opacity:1; }
   }
   @keyframes rippleOut{ to{ transform:scale(1); opacity:0; } }
+  @keyframes leafFall{
+    0%  { transform:translate(0,-24px) rotate(0deg) scale(var(--s,1)); opacity:0; }
+    8%  { opacity:.62; }
+    30% { transform:translate(16px,26vh) rotate(120deg) scale(var(--s,1)); }
+    60% { transform:translate(-14px,58vh) rotate(240deg) scale(var(--s,1)); }
+    92% { opacity:.62; }
+    100%{ transform:translate(10px,104vh) rotate(360deg) scale(var(--s,1)); opacity:0; }
+  }
+  @keyframes confettiFall{
+    0%  { transform:translateY(-14px) rotateZ(0deg) rotateY(0deg); }
+    100%{ transform:translateY(106vh) rotateZ(680deg) rotateY(360deg); }
+  }
 
   /* ===== BASE ===== */
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -381,6 +393,54 @@
 
   a:focus-visible, button:focus-visible{ outline:3px solid var(--terracotta); outline-offset:3px; }
 
+  /* ===== folhas de oliveira caindo (hero) ===== */
+  .leaves{ position:absolute; inset:0; z-index:2; pointer-events:none; overflow:hidden; }
+  .leaf-fall{
+    position:absolute; top:0; width:9px; height:15px;
+    background:var(--gold); border-radius:54% 4% 54% 54%;
+    opacity:0; box-shadow:inset -1px -1px 1px rgba(0,0,0,.10);
+    animation:leafFall linear infinite; will-change:transform,opacity;
+  }
+  .leaf-fall::after{
+    content:""; position:absolute; inset:0; border-radius:inherit;
+    background:linear-gradient(135deg, transparent 45%, rgba(255,255,255,.35) 50%, transparent 55%);
+  }
+  .leaf-fall.lf-sage{  background:var(--sage); }
+  .leaf-fall.lf-terra{ background:var(--terracotta); }
+  .lf1{ left:7%;  animation-duration:9s;    animation-delay:0s;   --s:1; }
+  .lf2{ left:21%; animation-duration:11s;   animation-delay:2.4s; --s:.78; }
+  .lf3{ left:37%; animation-duration:8s;    animation-delay:4.1s; --s:.92; }
+  .lf4{ left:53%; animation-duration:12s;   animation-delay:1.2s; --s:1.12; }
+  .lf5{ left:67%; animation-duration:9.5s;  animation-delay:5.3s; --s:.72; }
+  .lf6{ left:80%; animation-duration:10.5s; animation-delay:3s;   --s:1; }
+  .lf7{ left:92%; animation-duration:8.5s;  animation-delay:6.2s; --s:.88; }
+
+  /* ===== confete (dia da festa / selo) ===== */
+  .confetti{ position:fixed; inset:0; z-index:9996; pointer-events:none; overflow:hidden; }
+  .confetti i{ position:absolute; top:-14px; display:block; will-change:transform; animation:confettiFall linear forwards; }
+
+  /* ===== verso comemorativo do botão principal ===== */
+  .flip-msg{
+    display:flex; align-items:center; justify-content:center; gap:10px; width:100%;
+    font-family:'Cormorant Garamond',serif; font-weight:700; font-size:25px; color:#fff;
+    letter-spacing:.01em; padding:6px 0; text-align:center;
+  }
+  .flip-msg .gl{ font-size:26px; }
+
+  /* ===== cursor dourado (desktop) ===== */
+  .cur-dot, .cur-ring{
+    position:fixed; top:0; left:0; border-radius:50%; pointer-events:none;
+    z-index:9997; transform:translate(-50%,-50%); opacity:0; transition:opacity .3s ease;
+  }
+  .cur-dot{ width:8px; height:8px; background:var(--gold-deep); box-shadow:0 0 10px rgba(168,133,63,.75); }
+  .cur-ring{
+    width:30px; height:30px; border:1.5px solid rgba(176,106,58,.55);
+    transition:opacity .3s ease, width .25s var(--ease-out), height .25s var(--ease-out), border-color .25s ease, background .25s ease;
+  }
+  .cur-on .cur-dot, .cur-on .cur-ring{ opacity:1; }
+  .cur-ring.big{ width:54px; height:54px; border-color:rgba(201,169,110,.9); background:rgba(201,169,110,.10); }
+  @media (hover:none),(pointer:coarse){ .cur-dot, .cur-ring{ display:none !important; } }
+
   @media (prefers-reduced-motion:reduce){
     *, *::before, *::after{ transition:none !important; animation:none !important; }
     .anim{ opacity:1; transform:none; }
@@ -389,6 +449,8 @@
     .sprig .leaf{ opacity:1; }
     .badge svg path, .badge svg polyline, .badge svg circle, .badge svg line{ stroke-dashoffset:0; }
     .scroll-cue svg{ animation:none; }
+    .leaves{ display:none; }
+    .cur-dot, .cur-ring{ display:none !important; }
   }
 
   /* ===== DESKTOP ===== */
@@ -427,6 +489,15 @@
       <div class="orb orb4"></div>
     </div>
     <div class="hero-sweep" aria-hidden="true"></div>
+    <div class="leaves" aria-hidden="true">
+      <span class="leaf-fall lf1"></span>
+      <span class="leaf-fall lf-sage lf2"></span>
+      <span class="leaf-fall lf3"></span>
+      <span class="leaf-fall lf-terra lf4"></span>
+      <span class="leaf-fall lf-sage lf5"></span>
+      <span class="leaf-fall lf6"></span>
+      <span class="leaf-fall lf7"></span>
+    </div>
     <div class="hero-text">
       <div class="kicker">VOCÊ ESTÁ CONVIDADO</div>
       <h1 class="name">Luciano</h1>
@@ -679,6 +750,7 @@ var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: r
       var fimDia = new Date(2026,7,22,23,59,59);
       var simbolo = (new Date() <= fimDia) ? '🎉' : '✓';
       setCur(cDias, simbolo); setCur(cHoras, ''); setCur(cMin, ''); setCur(cSeg, '');
+      if(!window.__festaConfete && (new Date() <= fimDia)){ window.__festaConfete = true; festejar(160); }
       return;
     }
     roll(cDias, c.dias); roll(cHoras, pad(c.horas)); roll(cMin, pad(c.min)); roll(cSeg, pad(c.seg));
@@ -711,6 +783,107 @@ var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: r
     setTimeout(function(){ countUp(iniciarLive); }, 450);
     setTimeout(iniciarLive, 2400); // rede de segurança
   }
+})();
+
+// ---------- Confete comemorativo ----------
+function festejar(qtd){
+  if(REDUCED) return;
+  qtd = qtd || 110;
+  var cores = ['#c9a96e','#b06a3a','#3d4a37','#a8853f','#9a5a2e','#7c8262','#e9c9a8'];
+  var box = document.createElement('div'); box.className = 'confetti'; box.setAttribute('aria-hidden','true');
+  document.body.appendChild(box);
+  var maxT = 0;
+  for(var i=0;i<qtd;i++){
+    var p = document.createElement('i');
+    var w = 6 + Math.random()*8, h = w*(1.1 + Math.random()*0.9);
+    var dur = 2.6 + Math.random()*2.6, del = Math.random()*1.4;
+    p.style.left = (Math.random()*100) + '%';
+    p.style.width = w.toFixed(1) + 'px';
+    p.style.height = h.toFixed(1) + 'px';
+    p.style.background = cores[Math.floor(Math.random()*cores.length)];
+    if(Math.random() < 0.32) p.style.borderRadius = '50%';
+    p.style.opacity = (0.85 + Math.random()*0.15).toFixed(2);
+    p.style.animationDuration = dur.toFixed(2) + 's';
+    p.style.animationDelay = del.toFixed(2) + 's';
+    box.appendChild(p);
+    if(dur + del > maxT) maxT = dur + del;
+  }
+  setTimeout(function(){ if(box.parentNode) box.parentNode.removeChild(box); }, (maxT*1000) + 500);
+}
+
+// ---------- Selo de cera: easter egg de confete ----------
+(function(){
+  var seal = document.querySelector('.seal');
+  if(!seal) return;
+  seal.style.cursor = 'pointer';
+  seal.removeAttribute('aria-hidden');
+  seal.setAttribute('role','button');
+  seal.setAttribute('tabindex','0');
+  seal.setAttribute('aria-label','Soltar confete comemorativo');
+  function go(){ festejar(120); }
+  seal.addEventListener('click', go);
+  seal.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); go(); } });
+})();
+
+// ---------- Botão principal: flip 3D "Nos vemos lá!" ----------
+(function(){
+  var btn = document.querySelector('.btn-primary');
+  if(!btn) return;
+  var href = btn.getAttribute('href');
+  var original = null, animando = false;
+  function flipTo(deg, t){ btn.style.transition = t; btn.style.transform = 'perspective(900px) rotateY(' + deg + 'deg)'; }
+  btn.addEventListener('click', function(e){
+    if(REDUCED) return;              // sem animação: navega normal
+    if(animando){ e.preventDefault(); return; }
+    e.preventDefault();
+    animando = true;
+    if(original === null) original = btn.innerHTML;
+    flipTo(90, 'transform .3s ease-in');
+    setTimeout(function(){
+      btn.innerHTML = '<span class="flip-msg"><span class="gl">🥃</span> Nos vemos lá!</span>';
+      flipTo(-90, 'none'); void btn.offsetWidth; flipTo(0, 'transform .3s ease-out');
+    }, 300);
+    setTimeout(function(){ window.location.href = href; }, 2300);
+    // se a navegação não ocorrer (app abriu / usuário voltou), restaura o botão
+    setTimeout(function(){
+      if(!animando) return;
+      flipTo(90, 'transform .3s ease-in');
+      setTimeout(function(){
+        btn.innerHTML = original;
+        flipTo(-90, 'none'); void btn.offsetWidth; flipTo(0, 'transform .3s ease-out');
+        setTimeout(function(){ btn.style.transform = ''; btn.style.transition = ''; animando = false; }, 320);
+      }, 300);
+    }, 4200);
+  });
+  window.addEventListener('pageshow', function(){
+    if(animando && original !== null){ btn.innerHTML = original; btn.style.transform = ''; btn.style.transition = ''; animando = false; }
+  });
+})();
+
+// ---------- Cursor dourado (desktop) ----------
+(function(){
+  var fine = window.matchMedia && window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  if(!fine || REDUCED) return;
+  var ring = document.createElement('div'); ring.className = 'cur-ring'; ring.setAttribute('aria-hidden','true');
+  var dot  = document.createElement('div'); dot.className  = 'cur-dot';  dot.setAttribute('aria-hidden','true');
+  document.body.appendChild(ring); document.body.appendChild(dot);
+  var mx=0,my=0, dx=0,dy=0, rx=0,ry=0, on=false;
+  document.addEventListener('pointermove', function(e){
+    if(e.pointerType && e.pointerType !== 'mouse') return;
+    mx = e.clientX; my = e.clientY;
+    if(!on){ on = true; document.documentElement.classList.add('cur-on'); }
+  }, {passive:true});
+  window.addEventListener('blur', function(){ on = false; document.documentElement.classList.remove('cur-on'); });
+  document.addEventListener('mouseleave', function(){ on = false; document.documentElement.classList.remove('cur-on'); });
+  document.addEventListener('pointerover', function(e){ if(e.target.closest && e.target.closest('a,button,.seal')) ring.classList.add('big'); });
+  document.addEventListener('pointerout',  function(e){ if(e.target.closest && e.target.closest('a,button,.seal')) ring.classList.remove('big'); });
+  (function loop(){
+    dx += (mx-dx)*0.35; dy += (my-dy)*0.35;
+    rx += (mx-rx)*0.16; ry += (my-ry)*0.16;
+    dot.style.transform  = 'translate(' + dx + 'px,' + dy + 'px) translate(-50%,-50%)';
+    ring.style.transform = 'translate(' + rx + 'px,' + ry + 'px) translate(-50%,-50%)';
+    requestAnimationFrame(loop);
+  })();
 })();
 
 // ---------- Adicionar à agenda (.ics) ----------

@@ -274,12 +274,45 @@
   .totop svg{ width:22px; height:22px; }
   @media(hover:hover){ .totop:hover{ box-shadow:0 13px 30px rgba(61,74,55,.52); transform:translateY(-2px); } }
 
+  /* ===== filtro por tipo / preço ===== */
+  .filters{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin:16px 0 2px; }
+  .chip{
+    font-family:'Montserrat',sans-serif; font-weight:600; font-size:12.5px; letter-spacing:.03em;
+    color:var(--green-soft); background:var(--cream-soft); border:1px solid var(--cream-deep);
+    padding:7px 14px; border-radius:999px; cursor:pointer; display:inline-flex; align-items:center; gap:6px;
+    transition:transform .15s var(--ease-out), background .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease;
+  }
+  @media(hover:hover){ .chip:hover{ border-color:var(--gold); } }
+  .chip:active{ transform:scale(.95); }
+  .chip .ct{ font-size:10.5px; font-weight:700; opacity:.7; }
+  .chip[aria-pressed="true"]{
+    color:#fff; background:linear-gradient(165deg,#47553f,#38442f);
+    border-color:#38442f; box-shadow:0 6px 16px rgba(61,74,55,.28);
+  }
+  .chip[aria-pressed="true"] .ct{ opacity:.85; }
+  .f-out{ opacity:0 !important; transform:translateY(8px) scale(.98) !important; pointer-events:none; }
+
+  /* ===== cursor dourado (desktop) ===== */
+  .cur-dot, .cur-ring{
+    position:fixed; top:0; left:0; border-radius:50%; pointer-events:none;
+    z-index:9997; transform:translate(-50%,-50%); opacity:0; transition:opacity .3s ease;
+  }
+  .cur-dot{ width:8px; height:8px; background:var(--gold-deep); box-shadow:0 0 10px rgba(168,133,63,.75); }
+  .cur-ring{
+    width:30px; height:30px; border:1.5px solid rgba(176,106,58,.55);
+    transition:opacity .3s ease, width .25s var(--ease-out), height .25s var(--ease-out), border-color .25s ease, background .25s ease;
+  }
+  .cur-on .cur-dot, .cur-on .cur-ring{ opacity:1; }
+  .cur-ring.big{ width:54px; height:54px; border-color:rgba(201,169,110,.9); background:rgba(201,169,110,.10); }
+  @media (hover:none),(pointer:coarse){ .cur-dot, .cur-ring{ display:none !important; } }
+
   @media (prefers-reduced-motion:reduce){
     *, *::before, *::after{ transition:none !important; animation:none !important; }
     .js .anim{ opacity:1; transform:none; }
     .js .head .he{ opacity:1 !important; transform:none !important; }
     .sprig path, .sprig circle{ stroke-dashoffset:0; } .sprig .leaf{ opacity:1; }
     .tag{ animation:none; }
+    .cur-dot, .cur-ring{ display:none !important; }
   }
 
   @media (min-width:600px){
@@ -331,9 +364,16 @@
       <span>Valores <strong>estimados</strong> para 2 adultos e 2 diárias (21 a 23 de agosto). A reserva é feita diretamente no site indicado (Trivago ou Airbnb). Toque em qualquer opção para ver detalhes e reservar.</span>
     </div>
 
+    <div class="filters anim" id="filters" role="group" aria-label="Filtrar hospedagem">
+      <button class="chip" type="button" data-filter="all"   aria-pressed="true">Todos <span class="ct" data-c="all"></span></button>
+      <button class="chip" type="button" data-filter="h"     aria-pressed="false">Hotéis <span class="ct" data-c="h"></span></button>
+      <button class="chip" type="button" data-filter="a"     aria-pressed="false">Apartamentos <span class="ct" data-c="a"></span></button>
+      <button class="chip" type="button" data-filter="value" aria-pressed="false">Até R$ 500 <span class="ct" data-c="value"></span></button>
+    </div>
+
     <!-- ===== HOTÉIS ===== -->
-    <h2 class="sec-title anim">Hotéis</h2>
-    <p class="sec-note anim">em Poços de Caldas · cidade vizinha a Botelhos</p>
+    <h2 class="sec-title anim" data-grp="h-head">Hotéis</h2>
+    <p class="sec-note anim" data-grp="h-head">em Poços de Caldas · cidade vizinha a Botelhos</p>
     <div class="lodge-list">
 
       <a class="lodge h anim" href="https://www.trivago.com/share/RxtrvGmcVD" target="_blank" rel="noopener">
@@ -387,7 +427,7 @@
     </div>
 
     <!-- ===== AIRBNB ===== -->
-    <div class="divider-sprig anim">
+    <div class="divider-sprig anim" data-grp="divider">
       <svg class="sprig" width="160" height="34" viewBox="0 0 160 34" aria-hidden="true">
         <path d="M25 17 H67"/><path d="M135 17 H93"/>
         <path d="M80 26 C80 20 80 15 80 9"/>
@@ -398,8 +438,8 @@
         <ellipse class="leaf" cx="88" cy="22" rx="2" ry="3.4" transform="rotate(35 88 22)"/>
       </svg>
     </div>
-    <h2 class="sec-title anim">Apartamentos &amp; Casas</h2>
-    <p class="sec-note anim">opções no Airbnb · próximas a Botelhos</p>
+    <h2 class="sec-title anim" data-grp="a-head">Apartamentos &amp; Casas</h2>
+    <p class="sec-note anim" data-grp="a-head">opções no Airbnb · próximas a Botelhos</p>
     <div class="lodge-list">
 
       <a class="lodge a anim" href="https://www.airbnb.com.br/rooms/870552071692839441?check_in=2026-08-21&check_out=2026-08-23&guests=1&adults=2&s=67&unique_share_id=4baa145e-b5e6-4a60-b527-4e1da6d05f21" target="_blank" rel="noopener">
@@ -537,6 +577,7 @@ function countUpAmt(el){
     var txt = priceEl.firstChild; // nó de texto "≈ R$ 350"
     var raw = (txt && txt.nodeValue) || '';
     var priceInt = parseInt(raw.replace(/[^\d]/g, ''), 10) || 0;
+    card.setAttribute('data-price', priceInt);
     var prefix = (raw.match(/^(\D*)/) || ['', '≈ R$ '])[1] || '≈ R$ ';
     if(txt && priceInt > 0){
       var amt = document.createElement('span');
@@ -572,6 +613,68 @@ function countUpAmt(el){
     // cascata: atraso por posição dentro da seção
     var n = isHotel ? hCount++ : aCount++;
     card.style.transitionDelay = ((n % 6) * 0.06) + 's';
+  });
+})();
+
+// filtro animado por tipo / preço
+(function(){
+  var bar = document.getElementById('filters');
+  if(!bar) return;
+  var chips  = Array.prototype.slice.call(bar.querySelectorAll('.chip'));
+  var lodges = Array.prototype.slice.call(document.querySelectorAll('.lodge'));
+  var heads  = Array.prototype.slice.call(document.querySelectorAll('[data-grp]'));
+
+  function priceOf(c){ return parseInt(c.getAttribute('data-price') || '0', 10) || 0; }
+  function match(c, f){
+    if(f === 'h') return c.classList.contains('h');
+    if(f === 'a') return c.classList.contains('a');
+    if(f === 'value'){ var v = priceOf(c); return v > 0 && v <= 500; }
+    return true;
+  }
+  function hide(el){
+    if(REDUCED){ el.classList.add('f-out'); el.style.display = 'none'; return; }
+    el.classList.add('f-out');
+    el.__ht = setTimeout(function(){ if(el.classList.contains('f-out')) el.style.display = 'none'; }, 720);
+  }
+  function show(el, delay){
+    if(el.__ht){ clearTimeout(el.__ht); el.__ht = null; }
+    el.style.display = '';
+    el.classList.add('in');
+    if(REDUCED){ el.classList.remove('f-out'); return; }
+    void el.offsetWidth;
+    if(delay) el.style.transitionDelay = delay + 's';
+    el.classList.remove('f-out');
+    setTimeout(function(){ el.style.transitionDelay = ''; }, 780);
+  }
+  function apply(f){
+    var hv = 0, av = 0, idx = 0;
+    lodges.forEach(function(c){ if(match(c, f)){ if(c.classList.contains('h')) hv++; else av++; } });
+    lodges.forEach(function(c){ if(match(c, f)){ show(c, (idx++ % 6) * 0.04); } else hide(c); });
+    heads.forEach(function(el){
+      var g = el.getAttribute('data-grp'), vis = true;
+      if(g === 'h-head') vis = hv > 0;
+      else if(g === 'a-head') vis = av > 0;
+      else if(g === 'divider') vis = hv > 0 && av > 0;
+      if(vis) show(el); else hide(el);
+    });
+  }
+
+  // contagens nos chips
+  var nH = 0, nA = 0, nV = 0;
+  lodges.forEach(function(c){
+    if(c.classList.contains('h')) nH++; else nA++;
+    if(priceOf(c) > 0 && priceOf(c) <= 500) nV++;
+  });
+  function setC(f, n){ var s = bar.querySelector('.ct[data-c="' + f + '"]'); if(s) s.textContent = n; }
+  setC('all', nH + nA); setC('h', nH); setC('a', nA); setC('value', nV);
+
+  chips.forEach(function(c){
+    c.addEventListener('click', function(){
+      if(c.getAttribute('aria-pressed') === 'true') return;
+      chips.forEach(function(x){ x.setAttribute('aria-pressed', 'false'); });
+      c.setAttribute('aria-pressed', 'true');
+      apply(c.getAttribute('data-filter'));
+    });
   });
 })();
 
@@ -629,6 +732,32 @@ function countUpAmt(el){
       setTimeout(function(){ if(s.parentNode) s.parentNode.removeChild(s); }, 620);
     });
   });
+})();
+
+// cursor dourado (desktop)
+(function(){
+  var fine = window.matchMedia && window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  if(!fine || REDUCED) return;
+  var ring = document.createElement('div'); ring.className = 'cur-ring'; ring.setAttribute('aria-hidden','true');
+  var dot  = document.createElement('div'); dot.className  = 'cur-dot';  dot.setAttribute('aria-hidden','true');
+  document.body.appendChild(ring); document.body.appendChild(dot);
+  var mx=0,my=0, dx=0,dy=0, rx=0,ry=0, on=false;
+  document.addEventListener('pointermove', function(e){
+    if(e.pointerType && e.pointerType !== 'mouse') return;
+    mx = e.clientX; my = e.clientY;
+    if(!on){ on = true; document.documentElement.classList.add('cur-on'); }
+  }, {passive:true});
+  window.addEventListener('blur', function(){ on = false; document.documentElement.classList.remove('cur-on'); });
+  document.addEventListener('mouseleave', function(){ on = false; document.documentElement.classList.remove('cur-on'); });
+  document.addEventListener('pointerover', function(e){ if(e.target.closest && e.target.closest('a,button,.lodge,.chip,.totop')) ring.classList.add('big'); });
+  document.addEventListener('pointerout',  function(e){ if(e.target.closest && e.target.closest('a,button,.lodge,.chip,.totop')) ring.classList.remove('big'); });
+  (function loop(){
+    dx += (mx-dx)*0.35; dy += (my-dy)*0.35;
+    rx += (mx-rx)*0.16; ry += (my-ry)*0.16;
+    dot.style.transform  = 'translate(' + dx + 'px,' + dy + 'px) translate(-50%,-50%)';
+    ring.style.transform = 'translate(' + rx + 'px,' + ry + 'px) translate(-50%,-50%)';
+    requestAnimationFrame(loop);
+  })();
 })();
 </script>
 </body>
