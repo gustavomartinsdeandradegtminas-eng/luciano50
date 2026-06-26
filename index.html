@@ -510,6 +510,34 @@
   .seal.hint{ animation:sealHint 1.5s var(--ease-out) 2; }
   @keyframes sealHint{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.06); } }
 
+  /* ===== Os Detalhes (cartão essencial — vellum translúcido + topo em arco) ===== */
+  .details{
+    margin:34px 0 6px; padding:22px 20px 22px; text-align:center; position:relative;
+    background:linear-gradient(165deg, rgba(255,250,242,.82), rgba(244,231,211,.66));
+    -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+    border:1px solid rgba(201,169,110,.42);
+    border-radius:96px 96px 22px 22px / 42px 42px 22px 22px;
+    box-shadow:0 14px 40px rgba(80,60,35,.14), inset 0 1px 0 rgba(255,255,255,.85);
+  }
+  .details .sprig{ margin:2px auto 0; }
+  .details-title{
+    font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:600;
+    color:var(--green); font-size:23px; letter-spacing:.03em; margin:2px 0 18px;
+  }
+  .detail-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:15px; text-align:left; }
+  .detail{ display:flex; align-items:center; gap:14px; }
+  .detail-ico{
+    flex:0 0 auto; width:44px; height:44px; border-radius:50%; position:relative;
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(160deg,#c07a45,#a45c2c);
+    box-shadow:inset 0 2px 4px rgba(255,255,255,.22), inset 0 -3px 6px rgba(0,0,0,.16), 0 4px 10px rgba(80,60,35,.20);
+  }
+  .detail-ico::after{ content:""; position:absolute; inset:-3px; border-radius:50%; border:1px solid rgba(201,169,110,.5); }
+  .detail-ico svg{ width:22px; height:22px; display:block; }
+  .detail-txt{ display:flex; flex-direction:column; min-width:0; }
+  .detail-k{ font-family:'Montserrat',sans-serif; font-weight:600; font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--green-soft); text-indent:.16em; }
+  .detail-v{ font-family:'Cormorant Garamond',serif; font-weight:600; font-size:19px; color:var(--green); line-height:1.2; margin-top:1px; }
+
   @media (prefers-reduced-motion:reduce){
     *, *::before, *::after{ transition:none !important; animation:none !important; }
     .anim{ opacity:1; transform:none; }
@@ -665,6 +693,34 @@
         <span class="chev" aria-hidden="true">›</span>
       </a>
     </nav>
+
+    <!-- OS DETALHES -->
+    <section class="details anim" aria-label="Detalhes da festa">
+      <svg class="sprig" width="118" height="28" viewBox="0 0 150 34" aria-hidden="true">
+        <path d="M20 17 H62"/><path d="M130 17 H88"/>
+        <path d="M75 26 C75 20 75 15 75 9"/>
+        <path d="M75 18 C68 14 63 16 62 21 C67 23 72 22 75 18 Z"/>
+        <path d="M75 21 C82 17 87 19 88 24 C83 26 78 25 75 21 Z"/>
+        <circle cx="75" cy="8" r="2"/>
+        <ellipse class="leaf" cx="67" cy="19" rx="2" ry="3.4" transform="rotate(-35 67 19)"/>
+        <ellipse class="leaf" cx="83" cy="22" rx="2" ry="3.4" transform="rotate(35 83 22)"/>
+      </svg>
+      <h2 class="details-title">Os Detalhes</h2>
+      <ul class="detail-list">
+        <li class="detail">
+          <span class="detail-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5.5" width="16" height="15" rx="2.5"/><line x1="4" y1="10" x2="20" y2="10"/><line x1="8" y1="3" x2="8" y2="7.5"/><line x1="16" y1="3" x2="16" y2="7.5"/></svg></span>
+          <span class="detail-txt"><span class="detail-k">Data</span><span class="detail-v">Sábado, 22 de agosto de 2026</span></span>
+        </li>
+        <li class="detail">
+          <span class="detail-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><polyline points="12,7.5 12,12 15.5,14"/></svg></span>
+          <span class="detail-txt"><span class="detail-k">Horário</span><span class="detail-v">A partir das 16h</span></span>
+        </li>
+        <li class="detail">
+          <span class="detail-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21 C12 21 5 14.5 5 9.5 a7 7 0 1 1 14 0 C19 14.5 12 21 12 21 Z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>
+          <span class="detail-txt"><span class="detail-k">Local</span><span class="detail-v">Recepção em Botelhos · Minas Gerais</span></span>
+        </li>
+      </ul>
+    </section>
 
     <!-- MAPA -->
     <h2 class="section-title anim">Como chegar</h2>
