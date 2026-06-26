@@ -55,6 +55,12 @@
     0%  { opacity:0; transform:translateY(20px); }
     100%{ opacity:1; transform:none; }
   }
+  /* tipografia cinética: o nome surge desfocado e entra em foco */
+  @keyframes nameReveal{
+    0%  { opacity:0; transform:translateY(16px) scale(.965); filter:blur(9px); }
+    60% { opacity:1; }
+    100%{ opacity:1; transform:none; filter:blur(0); }
+  }
   @keyframes btnShimmer{
     0%  { transform:translateX(-130%) skewX(-16deg); }
     100%{ transform:translateX(260%) skewX(-16deg); }
@@ -146,6 +152,15 @@
     animation:heroSweep 8s ease-in-out 2s infinite;
   }
 
+  /* moldura em arco — emoldura a cena como um portal (tendência 2026) */
+  .hero-frame{
+    position:absolute; left:16px; right:16px; top:16px; bottom:14px; z-index:2;
+    border:1.5px solid rgba(201,169,110,.62);
+    border-radius:50% 50% 12px 12px / 17% 17% 12px 12px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.30), inset 0 0 32px rgba(120,80,40,.10);
+    pointer-events:none; opacity:0; animation:heroIn 1s var(--ease-out) .5s forwards;
+  }
+
   .hero-text{
     position:absolute; inset:0;
     display:flex; flex-direction:column; align-items:center;
@@ -154,7 +169,7 @@
   /* entrada coreografada */
   .hero-text > *{ opacity:0; animation:heroIn .95s var(--ease-out) forwards; }
   .hero-text .kicker{ animation-delay:.20s; }
-  .hero-text .name{   animation-delay:.34s; }
+  .hero-text .name{   animation-name:nameReveal; animation-duration:1.15s; animation-delay:.34s; }
   .hero-text .age{    animation-delay:.48s; }
   .hero-text .rule{   animation-delay:.60s; }
   .hero-text .date{   animation-delay:.70s; }
@@ -506,6 +521,7 @@
     .leaves{ display:none; }
     .cur-dot, .cur-ring{ display:none !important; }
     .hero-bg{ animation:none; }
+    .hero-frame{ opacity:1; }
     .intro-seal, .intro-word{ opacity:1; }
     .intro-ring circle{ stroke-dashoffset:0; }
   }
@@ -564,6 +580,7 @@
       <span class="leaf-fall lf6"></span>
       <span class="leaf-fall lf7"></span>
     </div>
+    <div class="hero-frame" aria-hidden="true"></div>
     <div class="hero-text">
       <div class="kicker">VOCÊ ESTÁ CONVIDADO</div>
       <h1 class="name">Luciano</h1>
