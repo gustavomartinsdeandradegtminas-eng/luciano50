@@ -71,12 +71,12 @@
   }
   @keyframes rippleOut{ to{ transform:scale(1); opacity:0; } }
   @keyframes leafFall{
-    0%  { transform:translate(0,-24px) rotate(0deg) scale(var(--s,1)); opacity:0; }
+    0%  { top:-6%;  transform:translateX(0) rotate(0deg) scale(var(--s,1)); opacity:0; }
     8%  { opacity:.62; }
-    30% { transform:translate(16px,26vh) rotate(120deg) scale(var(--s,1)); }
-    60% { transform:translate(-14px,58vh) rotate(240deg) scale(var(--s,1)); }
+    30% { transform:translateX(16px) rotate(120deg) scale(var(--s,1)); }
+    60% { transform:translateX(-14px) rotate(240deg) scale(var(--s,1)); }
     92% { opacity:.62; }
-    100%{ transform:translate(10px,104vh) rotate(360deg) scale(var(--s,1)); opacity:0; }
+    100%{ top:108%; transform:translateX(10px) rotate(360deg) scale(var(--s,1)); opacity:0; }
   }
   @keyframes confettiFall{
     0%  { transform:translateY(-14px) rotateZ(0deg) rotateY(0deg); }
@@ -719,12 +719,12 @@ var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: r
   // roll: novo valor sobe deslizando (efeito odômetro), à prova de aba oculta
   function roll(container, val){
     var s = String(val);
-    // finaliza qualquer transição ainda pendente -> garante 1 span só antes de começar
-    var nxtPend = container.querySelector('.nxt');
-    if(nxtPend){
-      var curPend = container.querySelector('.cur');
-      if(curPend && curPend.parentNode) curPend.parentNode.removeChild(curPend);
-      nxtPend.className = 'cur'; nxtPend.style.transform = 'none'; nxtPend.style.opacity = '1';
+    // colapsa qualquer transição pendente: mantém apenas 1 span (o mais recente) como atual
+    var spans = container.querySelectorAll('span');
+    if(spans.length > 1){
+      var keep = spans[spans.length - 1];
+      for(var k = 0; k < spans.length - 1; k++){ if(spans[k].parentNode) spans[k].parentNode.removeChild(spans[k]); }
+      keep.className = 'cur'; keep.removeAttribute('style');
     }
     var cur = curOf(container);
     if(!cur){ container.innerHTML = '<span class="cur">' + s + '</span>'; return; }
@@ -753,7 +753,7 @@ var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: r
       if(!window.__festaConfete && (new Date() <= fimDia)){ window.__festaConfete = true; festejar(160); }
       return;
     }
-    roll(cDias, c.dias); roll(cHoras, pad(c.horas)); roll(cMin, pad(c.min)); roll(cSeg, pad(c.seg));
+    roll(cDias, c.dias); roll(cHoras, pad(c.horas)); roll(cMin, pad(c.min)); setCur(cSeg, pad(c.seg));
   }
 
   var liveAtivo = false;
@@ -872,11 +872,10 @@ function festejar(qtd){
     if(e.pointerType && e.pointerType !== 'mouse') return;
     mx = e.clientX; my = e.clientY;
     if(!on){ on = true; document.documentElement.classList.add('cur-on'); }
+    ring.classList.toggle('big', !!(e.target.closest && e.target.closest('a,button,.seal')));
   }, {passive:true});
   window.addEventListener('blur', function(){ on = false; document.documentElement.classList.remove('cur-on'); });
   document.addEventListener('mouseleave', function(){ on = false; document.documentElement.classList.remove('cur-on'); });
-  document.addEventListener('pointerover', function(e){ if(e.target.closest && e.target.closest('a,button,.seal')) ring.classList.add('big'); });
-  document.addEventListener('pointerout',  function(e){ if(e.target.closest && e.target.closest('a,button,.seal')) ring.classList.remove('big'); });
   (function loop(){
     dx += (mx-dx)*0.35; dy += (my-dy)*0.35;
     rx += (mx-rx)*0.16; ry += (my-ry)*0.16;

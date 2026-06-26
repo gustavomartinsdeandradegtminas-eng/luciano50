@@ -746,11 +746,10 @@ function countUpAmt(el){
     if(e.pointerType && e.pointerType !== 'mouse') return;
     mx = e.clientX; my = e.clientY;
     if(!on){ on = true; document.documentElement.classList.add('cur-on'); }
+    ring.classList.toggle('big', !!(e.target.closest && e.target.closest('a,button,.lodge,.chip,.totop')));
   }, {passive:true});
   window.addEventListener('blur', function(){ on = false; document.documentElement.classList.remove('cur-on'); });
   document.addEventListener('mouseleave', function(){ on = false; document.documentElement.classList.remove('cur-on'); });
-  document.addEventListener('pointerover', function(e){ if(e.target.closest && e.target.closest('a,button,.lodge,.chip,.totop')) ring.classList.add('big'); });
-  document.addEventListener('pointerout',  function(e){ if(e.target.closest && e.target.closest('a,button,.lodge,.chip,.totop')) ring.classList.remove('big'); });
   (function loop(){
     dx += (mx-dx)*0.35; dy += (my-dy)*0.35;
     rx += (mx-rx)*0.16; ry += (my-ry)*0.16;
