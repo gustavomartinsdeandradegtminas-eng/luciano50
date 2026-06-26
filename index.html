@@ -485,30 +485,6 @@
   .hero-bg{ animation:kenBurns 26s ease-in-out 1s infinite alternate; transform-origin:50% 42%; will-change:transform; }
   @keyframes kenBurns{ from{ transform:scale(1); } to{ transform:scale(1.06); } }
 
-  /* ===== compartilhar convite ===== */
-  .share-wrap{ text-align:center; margin:22px 0 2px; }
-  .share-btn{
-    -webkit-appearance:none; appearance:none; font-family:'Montserrat',sans-serif; cursor:pointer;
-    display:inline-flex; align-items:center; gap:9px; font-weight:600; font-size:14px; letter-spacing:.02em;
-    color:var(--green); background:var(--cream-soft); border:1px solid var(--cream-deep);
-    padding:11px 20px; border-radius:999px; box-shadow:0 4px 12px rgba(80,60,35,.10);
-    transition:transform .15s var(--ease-out), box-shadow .25s ease, border-color .25s ease;
-  }
-  .share-btn:active{ transform:scale(.96); }
-  @media(hover:hover){ .share-btn:hover{ border-color:var(--gold); box-shadow:0 8px 20px rgba(80,60,35,.16); } }
-  .share-btn svg{ width:17px; height:17px; }
-
-  /* ===== toast ===== */
-  .toast{
-    position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(16px);
-    background:linear-gradient(165deg,#47553f,#38442f); color:#f3e6d2;
-    font-family:'Montserrat',sans-serif; font-weight:600; font-size:13.5px;
-    padding:11px 18px; border-radius:999px; box-shadow:0 12px 30px rgba(61,74,55,.4);
-    z-index:10001; opacity:0; pointer-events:none; max-width:84vw; text-align:center;
-    transition:opacity .3s ease, transform .3s var(--ease-out);
-  }
-  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
-
   /* ===== dica do selo (uma vez) ===== */
   .seal.hint{ animation:sealHint 1.5s var(--ease-out) 2; }
   @keyframes sealHint{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.06); } }
@@ -703,16 +679,6 @@
       </button>
     </nav>
 
-    <div class="share-wrap anim">
-      <button type="button" class="share-btn" id="btn-share" aria-label="Compartilhar o convite">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-          <line x1="8.6" y1="10.5" x2="15.4" y2="6.5"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/>
-        </svg>
-        Compartilhar o convite
-      </button>
-    </div>
-
   </div>
 
   <!-- RODAPÉ -->
@@ -722,8 +688,6 @@
     <div class="fsub">Luciano de Andrade · 22 de agosto de 2026</div>
   </footer>
 </main>
-
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
 var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1012,42 +976,6 @@ function festejar(qtd){
     ring.style.transform = 'translate(' + rx + 'px,' + ry + 'px) translate(-50%,-50%)';
     requestAnimationFrame(loop);
   })();
-})();
-
-// ---------- Compartilhar o convite ----------
-(function(){
-  var btn = document.getElementById('btn-share');
-  var toast = document.getElementById('toast');
-  if(!btn) return;
-  var url = 'https://gustavomartinsdeandradegtminas-eng.github.io/luciano50/';
-  var dados = {
-    title: '50 anos do Luciano',
-    text: 'Você está convidado(a) para os 50 anos do Luciano de Andrade — 22 de agosto de 2026, a partir das 16h.',
-    url: url
-  };
-  var tmr;
-  function mostrar(msg){
-    if(!toast) return;
-    toast.textContent = msg; toast.classList.add('show');
-    clearTimeout(tmr); tmr = setTimeout(function(){ toast.classList.remove('show'); }, 2600);
-  }
-  function copiarFallback(){
-    try{
-      var ta = document.createElement('textarea');
-      ta.value = url; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
-      document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
-      mostrar('Link copiado!');
-    }catch(e){ mostrar(url); }
-  }
-  btn.addEventListener('click', function(){
-    if(navigator.share){
-      navigator.share(dados).catch(function(){});
-    } else if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(url).then(function(){ mostrar('Link copiado!'); }, copiarFallback);
-    } else {
-      copiarFallback();
-    }
-  });
 })();
 
 // ---------- Adicionar à agenda (.ics) ----------
