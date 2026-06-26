@@ -181,33 +181,48 @@
     text-align:center;
     margin:2px 0 26px;
   }
-  .cd-pill{
-    display:inline-flex; align-items:center; justify-content:center; gap:.38em;
+  .cd-blocks{
+    display:inline-flex;
+    align-items:flex-start;
     background:var(--cream-soft);
     border:1px solid var(--cream-deep);
     border-radius:999px;
-    padding:14px 32px;
+    padding:14px 20px;
     box-shadow:var(--shadow-soft);
+    gap:0;
+  }
+  .cd-block{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-width:54px;
   }
   .cd-num{
     font-family:'Cormorant Garamond',serif;
     font-weight:700;
-    font-size:46px;
+    font-size:38px;
     line-height:1;
     color:var(--terracotta);
   }
-  .cd-label{
-    font-family:'Cormorant Garamond',serif;
-    font-style:italic;
-    font-size:22px;
-    line-height:1;
-    color:var(--green);
-  }
-  .cd-sub{
-    margin-top:9px;
-    font-size:14px;
+  .cd-unit{
+    font-family:'Montserrat',sans-serif;
+    font-weight:500;
+    font-size:10.5px;
     letter-spacing:.06em;
+    text-transform:uppercase;
     color:var(--green-soft);
+    margin-top:4px;
+    line-height:1;
+  }
+  .cd-sep{
+    font-family:'Cormorant Garamond',serif;
+    font-weight:700;
+    font-size:32px;
+    line-height:1;
+    color:var(--terracotta);
+    opacity:.45;
+    padding:0 3px;
+    margin-top:3px;
   }
 
   /* botões de ação grandes */
@@ -384,11 +399,27 @@
 
       <!-- ===== Contagem regressiva ===== -->
       <section class="countdown" aria-live="polite">
-        <div class="cd-pill">
-          <span class="cd-num" id="cd-num">—</span>
-          <span class="cd-label" id="cd-label">dias</span>
+        <div class="cd-blocks">
+          <div class="cd-block">
+            <span class="cd-num" id="cd-dias">—</span>
+            <span class="cd-unit">dias</span>
+          </div>
+          <span class="cd-sep">:</span>
+          <div class="cd-block">
+            <span class="cd-num" id="cd-horas">00</span>
+            <span class="cd-unit">horas</span>
+          </div>
+          <span class="cd-sep">:</span>
+          <div class="cd-block">
+            <span class="cd-num" id="cd-min">00</span>
+            <span class="cd-unit">min</span>
+          </div>
+          <span class="cd-sep">:</span>
+          <div class="cd-block">
+            <span class="cd-num" id="cd-seg">00</span>
+            <span class="cd-unit">seg</span>
+          </div>
         </div>
-        <div class="cd-sub" id="cd-sub">para a grande festa</div>
       </section>
 
       <!-- ===== Ações principais ===== -->
@@ -470,43 +501,40 @@
   // ---------- Contagem regressiva ----------
   (function(){
     var alvo = new Date(2026, 7, 22, 16, 0, 0); // 22/ago/2026 16h (horário local)
-    var elNum = document.getElementById('cd-num');
-    var elLabel = document.getElementById('cd-label');
-    var elSub = document.getElementById('cd-sub');
+    var elDias  = document.getElementById('cd-dias');
+    var elHoras = document.getElementById('cd-horas');
+    var elMin   = document.getElementById('cd-min');
+    var elSeg   = document.getElementById('cd-seg');
+
+    function pad(n){ return (n < 10 ? '0' : '') + n; }
 
     function atualizar(){
       var agora = new Date();
       var diff = alvo - agora;
       if(diff <= 0){
-        // durante / depois do evento
         var fimDia = new Date(2026,7,22,23,59,59);
         if(agora <= fimDia){
-          elNum.textContent = '🎉';
-          elLabel.textContent = 'É hoje!';
-          elSub.textContent = 'Hoje é a grande festa — seja bem-vindo(a)!';
+          elDias.textContent='🎉'; elHoras.textContent=''; elMin.textContent=''; elSeg.textContent='';
         } else {
-          elNum.style.display='none';
-          elLabel.textContent = 'Obrigado por celebrar conosco!';
-          elSub.textContent = '';
+          elDias.textContent='✓'; elHoras.textContent=''; elMin.textContent=''; elSeg.textContent='';
         }
         return;
       }
-      var dia = 24*60*60*1000;
-      var dias = Math.floor(diff / dia);
-      var horas = Math.floor((diff % dia) / (60*60*1000));
-      if(dias > 0){
-        elNum.textContent = dias;
-        elLabel.textContent = (dias === 1) ? 'dia' : 'dias';
-        elSub.textContent = (horas === 1) ? 'e mais 1 hora para a festa' : 'e mais ' + horas + ' horas para a festa';
-      } else {
-        var min = Math.floor((diff % (60*60*1000)) / 60000);
-        elNum.textContent = horas;
-        elLabel.textContent = (horas === 1) ? 'hora' : 'horas';
-        elSub.textContent = 'e ' + min + ' minutos para a festa';
-      }
+      var totalSeg = Math.floor(diff / 1000);
+      var seg   = totalSeg % 60;
+      var totalMin = Math.floor(totalSeg / 60);
+      var min   = totalMin % 60;
+      var totalH = Math.floor(totalMin / 60);
+      var horas = totalH % 24;
+      var dias  = Math.floor(totalH / 24);
+
+      elDias.textContent  = dias;
+      elHoras.textContent = pad(horas);
+      elMin.textContent   = pad(min);
+      elSeg.textContent   = pad(seg);
     }
     atualizar();
-    setInterval(atualizar, 60*1000);
+    setInterval(atualizar, 1000);
   })();
 
   // ---------- Adicionar à agenda (.ics universal) ----------
