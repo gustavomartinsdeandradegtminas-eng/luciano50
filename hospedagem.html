@@ -187,6 +187,25 @@
     font-family:'Cormorant Garamond',serif; font-weight:600; font-size:13.5px;
     color:var(--green-soft); line-height:1.15; margin-top:1px; }
   html[lang="en"] .lodge-usd{ display:block; }   /* dólar só no modo inglês */
+
+  /* ===== cartão "ver mais opções" (busca ao vivo) ===== */
+  .lodge-more{
+    display:flex; align-items:center; gap:14px; text-decoration:none; color:inherit; position:relative;
+    background:rgba(247,236,218,.45); border:1.5px dashed rgba(201,169,110,.6); border-radius:18px; padding:15px 17px;
+    transition:transform .18s var(--ease-out), box-shadow .25s ease, border-color .25s ease, background .25s ease;
+  }
+  .lodge-more:active{ transform:scale(.99); }
+  @media(hover:hover){
+    .lodge-more:hover{ transform:translateY(-3px); border-color:var(--gold); background:rgba(247,236,218,.82); box-shadow:0 12px 26px rgba(80,60,35,.16); }
+    .lodge-more:hover .more-chev{ transform:translateX(5px); }
+  }
+  .lodge-more-ico{ flex:0 0 auto; width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(160deg,#8a9070,#6f7657); box-shadow:inset 0 2px 4px rgba(255,255,255,.2), 0 4px 10px rgba(80,60,35,.18); }
+  .lodge-more-ico svg{ width:22px; height:22px; display:block; }
+  .lodge-more-txt{ display:flex; flex-direction:column; min-width:0; }
+  .lodge-more-t1{ font-family:'Cormorant Garamond',serif; font-weight:700; font-size:20px; color:var(--green); line-height:1.1; }
+  .lodge-more-t2{ font-size:12.5px; color:var(--green-soft); margin-top:3px; line-height:1.35; }
+  .more-chev{ margin-left:auto; flex:0 0 auto; color:var(--terracotta); font-size:24px; line-height:1; transition:transform .2s var(--ease-out); }
   .lodge-sub{ font-size:13.5px; color:var(--green-soft); margin-top:6px; line-height:1.4; }
   .lodge-foot{ display:flex; justify-content:space-between; align-items:center; margin-top:13px; gap:10px; }
   .rating{
@@ -517,6 +536,12 @@
         <div class="lodge-head"><span class="lodge-name" data-en="Country House <span style='font-weight:500;font-size:15px;font-style:italic;'>(15 min from Botelhos)</span>">Casa de Campo <span style="font-weight:500;font-size:15px;font-style:italic;">(15 min de Botelhos)</span></span><span class="lodge-price">≈ R$ 1.200<small>2 noites</small></span></div>
         <div class="lodge-sub" data-en="Up to 12 guests · 2 nights">Até 12 hóspedes · 2 diárias</div>
         <div class="lodge-foot"><span class="rating none">sem avaliação ainda</span><span class="go"><span class="src">Airbnb</span> ver e reservar ›</span></div>
+      </a>
+
+      <a class="lodge-more anim" data-grp="a-head" href="https://www.airbnb.com.br/s/Po%C3%A7os-de-Caldas--Minas-Gerais/homes?checkin=2026-08-21&checkout=2026-08-23&adults=2" target="_blank" rel="noopener">
+        <span class="lodge-more-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg></span>
+        <span class="lodge-more-txt"><span class="lodge-more-t1" data-en="See more options">Ver mais opções</span><span class="lodge-more-t2" data-en="All current listings on Airbnb — Poços de Caldas, on the party dates">Todos os anúncios disponíveis no Airbnb — Poços de Caldas, nas datas da festa</span></span>
+        <span class="more-chev" aria-hidden="true">›</span>
       </a>
 
     </div>
