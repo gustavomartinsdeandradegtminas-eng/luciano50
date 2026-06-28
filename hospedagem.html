@@ -182,7 +182,10 @@
     color:var(--terracotta); white-space:nowrap; flex:0 0 auto;
   }
   .lodge-price small{ display:block; font-size:9.5px; font-weight:600; letter-spacing:.08em;
-    text-transform:uppercase; color:var(--green-soft); font-family:'Montserrat',sans-serif; text-align:right; margin-top:1px; }
+    text-transform:uppercase; color:var(--green-soft); font-family:'Montserrat',sans-serif; text-align:right; margin-top:3px; }
+  .lodge-usd{ display:block; text-align:right; white-space:nowrap;
+    font-family:'Cormorant Garamond',serif; font-weight:600; font-size:13.5px;
+    color:var(--green-soft); line-height:1.15; margin-top:1px; }
   .lodge-sub{ font-size:13.5px; color:var(--green-soft); margin-top:6px; line-height:1.4; }
   .lodge-foot{ display:flex; justify-content:space-between; align-items:center; margin-top:13px; gap:10px; }
   .rating{
@@ -685,6 +688,23 @@ function countUpAmt(el){
     // cascata: atraso por posição dentro da seção
     var n = isHotel ? hCount++ : aCount++;
     card.style.transitionDelay = ((n % 6) * 0.06) + 's';
+  });
+})();
+
+// preço aproximado em dólar (abaixo do real) — taxa fixa, sem dependência de rede
+(function(){
+  var BRL_PER_USD = 5.5;   // cotação aproximada (fácil de atualizar)
+  function toUSD(brl){ return Math.round(brl / BRL_PER_USD); }
+  document.querySelectorAll('.lodge').forEach(function(card){
+    var brl = parseInt(card.getAttribute('data-price') || '0', 10);
+    if(!(brl > 0)) return;
+    var priceEl = card.querySelector('.lodge-price'); if(!priceEl) return;
+    if(priceEl.querySelector('.lodge-usd')) return;
+    var span = document.createElement('span');
+    span.className = 'lodge-usd';
+    span.textContent = '≈ US$ ' + toUSD(brl).toLocaleString('en-US');
+    var small = priceEl.querySelector('small');
+    if(small) priceEl.insertBefore(span, small); else priceEl.appendChild(span);
   });
 })();
 
