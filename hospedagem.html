@@ -183,9 +183,10 @@
   }
   .lodge-price small{ display:block; font-size:9.5px; font-weight:600; letter-spacing:.08em;
     text-transform:uppercase; color:var(--green-soft); font-family:'Montserrat',sans-serif; text-align:right; margin-top:3px; }
-  .lodge-usd{ display:block; text-align:right; white-space:nowrap;
+  .lodge-usd{ display:none; text-align:right; white-space:nowrap;
     font-family:'Cormorant Garamond',serif; font-weight:600; font-size:13.5px;
     color:var(--green-soft); line-height:1.15; margin-top:1px; }
+  html[lang="en"] .lodge-usd{ display:block; }   /* dólar só no modo inglês */
   .lodge-sub{ font-size:13.5px; color:var(--green-soft); margin-top:6px; line-height:1.4; }
   .lodge-foot{ display:flex; justify-content:space-between; align-items:center; margin-top:13px; gap:10px; }
   .rating{
