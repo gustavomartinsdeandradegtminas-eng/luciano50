@@ -315,6 +315,22 @@
   .cur-ring.big{ width:54px; height:54px; border-color:rgba(201,169,110,.9); background:rgba(201,169,110,.10); }
   @media (hover:none),(pointer:coarse){ .cur-dot, .cur-ring{ display:none !important; } }
 
+  /* ===== seletor de idioma (PT/EN) ===== */
+  .lang{
+    position:fixed; top:12px; right:12px; z-index:9994; display:flex; gap:2px;
+    background:rgba(247,236,218,.92); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+    border:1px solid rgba(201,169,110,.6); border-radius:999px; padding:3px;
+    box-shadow:0 4px 14px rgba(80,60,35,.22);
+  }
+  .lang-btn{
+    -webkit-appearance:none; appearance:none; cursor:pointer; border:0; background:transparent;
+    font-family:'Montserrat',sans-serif; font-weight:700; font-size:12px; letter-spacing:.04em;
+    color:var(--green-soft); padding:5px 11px; border-radius:999px; line-height:1;
+    transition:background .2s ease, color .2s ease;
+  }
+  .lang-btn[aria-pressed="true"]{ background:linear-gradient(165deg,#47553f,#38442f); color:#f8efe0; }
+  @media(hover:hover){ .lang-btn:hover{ color:var(--green); } .lang-btn[aria-pressed="true"]:hover{ color:#fff; } }
+
   @media (prefers-reduced-motion:reduce){
     *, *::before, *::after{ transition:none !important; animation:none !important; }
     .js .anim{ opacity:1; transform:none; }
@@ -341,20 +357,26 @@
 <body>
 <div class="ambient" aria-hidden="true"></div>
 <div class="progress" id="progress" aria-hidden="true"></div>
+
+<div class="lang" role="group" aria-label="Idioma / Language">
+  <button type="button" class="lang-btn" data-lang="pt" aria-pressed="true">PT</button>
+  <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+</div>
+
 <main class="page">
 
   <div class="topbar">
     <a class="back" href="index.html">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15,18 9,12 15,6"/></svg>
-      Voltar ao convite
+      <span data-en="Back to invitation">Voltar ao convite</span>
     </a>
   </div>
 
   <header class="head">
     <div class="head-orbs" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span></div>
-    <p class="kicker he he1">50 ANOS DO LUCIANO · 22.08.2026</p>
-    <h1 class="he he2">Onde se Hospedar</h1>
-    <p class="sub he he3">Sugestões perto da festa</p>
+    <p class="kicker he he1" data-en="LUCIANO'S 50TH · AUG 22, 2026">50 ANOS DO LUCIANO · 22.08.2026</p>
+    <h1 class="he he2" data-en="Where to Stay">Onde se Hospedar</h1>
+    <p class="sub he he3" data-en="Suggestions near the party">Sugestões perto da festa</p>
     <svg class="sprig he he4" width="160" height="34" viewBox="0 0 160 34" aria-hidden="true">
       <path d="M25 17 H67"/><path d="M135 17 H93"/>
       <path d="M80 26 C80 20 80 15 80 9"/>
@@ -370,19 +392,19 @@
 
     <div class="note-card anim">
       <span class="ico" aria-hidden="true">🏷️</span>
-      <span>Valores <strong>estimados</strong> para 2 adultos e 2 diárias (21 a 23 de agosto). A reserva é feita diretamente no site indicado (Trivago ou Airbnb). Toque em qualquer opção para ver detalhes e reservar.</span>
+      <span data-en="Prices are <strong>estimated</strong> for 2 adults and 2 nights (August 21–23). Booking is done directly on the listed site (Trivago or Airbnb). Tap any option to see details and book.">Valores <strong>estimados</strong> para 2 adultos e 2 diárias (21 a 23 de agosto). A reserva é feita diretamente no site indicado (Trivago ou Airbnb). Toque em qualquer opção para ver detalhes e reservar.</span>
     </div>
 
-    <div class="filters anim" id="filters" role="group" aria-label="Filtrar hospedagem">
-      <button class="chip" type="button" data-filter="all"   aria-pressed="true">Todos <span class="ct" data-c="all"></span></button>
-      <button class="chip" type="button" data-filter="h"     aria-pressed="false">Hotéis <span class="ct" data-c="h"></span></button>
-      <button class="chip" type="button" data-filter="a"     aria-pressed="false">Apartamentos <span class="ct" data-c="a"></span></button>
-      <button class="chip" type="button" data-filter="value" aria-pressed="false">Até R$ 500 <span class="ct" data-c="value"></span></button>
+    <div class="filters anim" id="filters" role="group" aria-label="Filtrar hospedagem" data-en-aria="Filter lodging">
+      <button class="chip" type="button" data-filter="all"   aria-pressed="true"><span data-en="All">Todos</span> <span class="ct" data-c="all"></span></button>
+      <button class="chip" type="button" data-filter="h"     aria-pressed="false"><span data-en="Hotels">Hotéis</span> <span class="ct" data-c="h"></span></button>
+      <button class="chip" type="button" data-filter="a"     aria-pressed="false"><span data-en="Apartments">Apartamentos</span> <span class="ct" data-c="a"></span></button>
+      <button class="chip" type="button" data-filter="value" aria-pressed="false"><span data-en="Up to R$ 500">Até R$ 500</span> <span class="ct" data-c="value"></span></button>
     </div>
 
     <!-- ===== HOTÉIS ===== -->
-    <h2 class="sec-title anim" data-grp="h-head">Hotéis</h2>
-    <p class="sec-note anim" data-grp="h-head">em Poços de Caldas · cidade vizinha a Botelhos</p>
+    <h2 class="sec-title anim" data-grp="h-head" data-en="Hotels">Hotéis</h2>
+    <p class="sec-note anim" data-grp="h-head" data-en="in Poços de Caldas · town next to Botelhos">em Poços de Caldas · cidade vizinha a Botelhos</p>
     <div class="lodge-list">
 
       <a class="lodge h anim" href="https://www.trivago.com/share/RxtrvGmcVD" target="_blank" rel="noopener">
@@ -447,68 +469,68 @@
         <ellipse class="leaf" cx="88" cy="22" rx="2" ry="3.4" transform="rotate(35 88 22)"/>
       </svg>
     </div>
-    <h2 class="sec-title anim" data-grp="a-head">Apartamentos &amp; Casas</h2>
-    <p class="sec-note anim" data-grp="a-head">opções no Airbnb · próximas a Botelhos</p>
+    <h2 class="sec-title anim" data-grp="a-head" data-en="Apartments &amp; Houses">Apartamentos &amp; Casas</h2>
+    <p class="sec-note anim" data-grp="a-head" data-en="options on Airbnb · near Botelhos">opções no Airbnb · próximas a Botelhos</p>
     <div class="lodge-list">
 
       <a class="lodge a anim" href="https://www.airbnb.com.br/rooms/870552071692839441?check_in=2026-08-21&check_out=2026-08-23&guests=1&adults=2&s=67&unique_share_id=4baa145e-b5e6-4a60-b527-4e1da6d05f21" target="_blank" rel="noopener">
-        <div class="lodge-head"><span class="lodge-name">Kitnet Privativa</span><span class="lodge-price">≈ R$ 280<small>2 noites</small></span></div>
-        <div class="lodge-sub">Até 2 hóspedes · 2 diárias</div>
+        <div class="lodge-head"><span class="lodge-name" data-en="Private Studio">Kitnet Privativa</span><span class="lodge-price">≈ R$ 280<small>2 noites</small></span></div>
+        <div class="lodge-sub" data-en="Up to 2 guests · 2 nights">Até 2 hóspedes · 2 diárias</div>
         <div class="lodge-foot"><span class="rating"><span class="star">★</span> 4,82<small>/5</small></span><span class="go"><span class="src">Airbnb</span> ver e reservar ›</span></div>
       </a>
 
       <a class="lodge a anim" href="https://www.airbnb.com.br/rooms/1561146831271603305?check_in=2026-08-21&check_out=2026-08-23&guests=1&adults=2&s=67&unique_share_id=fd5f0a4f-96e1-444d-b7fb-59f5d7931811" target="_blank" rel="noopener">
-        <div class="lodge-head"><span class="lodge-name">Apartamento Zona Leste</span><span class="lodge-price">≈ R$ 280<small>2 noites</small></span></div>
-        <div class="lodge-sub">Até 3 hóspedes · 2 diárias</div>
+        <div class="lodge-head"><span class="lodge-name" data-en="East Side Apartment">Apartamento Zona Leste</span><span class="lodge-price">≈ R$ 280<small>2 noites</small></span></div>
+        <div class="lodge-sub" data-en="Up to 3 guests · 2 nights">Até 3 hóspedes · 2 diárias</div>
         <div class="lodge-foot"><span class="rating"><span class="star">★</span> 5,0<small>/5</small></span><span class="go"><span class="src">Airbnb</span> ver e reservar ›</span></div>
       </a>
 
       <a class="lodge a anim" href="https://www.airbnb.com.br/rooms/53864760?check_in=2026-08-21&check_out=2026-08-23&guests=1&adults=2&s=67&unique_share_id=7ef34b94-c31e-4343-8b6b-a6deb76a4b4f" target="_blank" rel="noopener">
-        <div class="lodge-head"><span class="lodge-name">Apartamento Recém Reformado</span><span class="lodge-price">≈ R$ 410<small>2 noites</small></span></div>
-        <div class="lodge-sub">Até 4 hóspedes · 2 diárias</div>
+        <div class="lodge-head"><span class="lodge-name" data-en="Newly Renovated Apartment">Apartamento Recém Reformado</span><span class="lodge-price">≈ R$ 410<small>2 noites</small></span></div>
+        <div class="lodge-sub" data-en="Up to 4 guests · 2 nights">Até 4 hóspedes · 2 diárias</div>
         <div class="lodge-foot"><span class="rating"><span class="star">★</span> 4,88<small>/5</small></span><span class="go"><span class="src">Airbnb</span> ver e reservar ›</span></div>
       </a>
 
       <a class="lodge a anim" href="https://www.airbnb.com.br/rooms/1541583131854205219?check_in=2026-08-21&check_out=2026-08-23&guests=1&adults=2&s=67&unique_share_id=41b05512-b9f1-4340-a4f6-82cb1515f79a" target="_blank" rel="noopener">
-        <div class="lodge-head"><span class="lodge-name">Apartamento Conforto no Estilo Mineiro</span><span class="lodge-price">≈ R$ 700<small>2 noites</small></span></div>
-        <div class="lodge-sub">Até 4 hóspedes · 2 diárias</div>
+        <div class="lodge-head"><span class="lodge-name" data-en="Cozy Apartment, Minas Gerais Style">Apartamento Conforto no Estilo Mineiro</span><span class="lodge-price">≈ R$ 700<small>2 noites</small></span></div>
+        <div class="lodge-sub" data-en="Up to 4 guests · 2 nights">Até 4 hóspedes · 2 diárias</div>
         <div class="lodge-foot"><span class="rating"><span class="star">★</span> 4,8<small>/5</small></span><span class="go"><span class="src">Airbnb</span> ver e reservar ›</span></div>
       </a>
 
       <a class="lodge a anim" href="https://www.airbnb.com.br/rooms/833544354050437660?check_in=2026-08-20&check_out=2026-08-23&guests=1&adults=2&s=67&unique_share_id=229d070b-1379-459a-87b5-a04dd48f6d2d" target="_blank" rel="noopener">
-        <div class="lodge-head"><span class="lodge-name">Apartamento Confortável em Condomínio</span><span class="lodge-price">≈ R$ 770<small>2 noites</small></span></div>
-        <div class="lodge-sub">Até 5 hóspedes · 2 diárias</div>
+        <div class="lodge-head"><span class="lodge-name" data-en="Comfortable Apartment in a Gated Community">Apartamento Confortável em Condomínio</span><span class="lodge-price">≈ R$ 770<small>2 noites</small></span></div>
+        <div class="lodge-sub" data-en="Up to 5 guests · 2 nights">Até 5 hóspedes · 2 diárias</div>
         <div class="lodge-foot"><span class="rating"><span class="star">★</span> 4,94<small>/5</small></span><span class="go"><span class="src">Airbnb</span> ver e reservar ›</span></div>
       </a>
 
       <a class="lodge a anim" href="https://www.airbnb.com.br/rooms/1179739333735760846?check_in=2026-08-20&check_out=2026-08-23&guests=1&adults=2&s=67&unique_share_id=a9f44f20-a246-4c42-bcce-90231280491a" target="_blank" rel="noopener">
-        <div class="lodge-head"><span class="lodge-name">Apartamento em Condomínio</span><span class="lodge-price">≈ R$ 770<small>2 noites</small></span></div>
-        <div class="lodge-sub">Até 4 hóspedes · 2 diárias</div>
+        <div class="lodge-head"><span class="lodge-name" data-en="Apartment in a Gated Community">Apartamento em Condomínio</span><span class="lodge-price">≈ R$ 770<small>2 noites</small></span></div>
+        <div class="lodge-sub" data-en="Up to 4 guests · 2 nights">Até 4 hóspedes · 2 diárias</div>
         <div class="lodge-foot"><span class="rating"><span class="star">★</span> 4,9<small>/5</small></span><span class="go"><span class="src">Airbnb</span> ver e reservar ›</span></div>
       </a>
 
       <a class="lodge a anim" href="https://www.airbnb.com.br/rooms/847230065131756549?check_in=2026-08-20&check_out=2026-08-23&guests=1&adults=2&s=67&unique_share_id=4f99874b-feff-4e17-85cd-37736350ffb4" target="_blank" rel="noopener">
-        <div class="lodge-head"><span class="lodge-name">Apartamento em Condomínio</span><span class="lodge-price">≈ R$ 770<small>2 noites</small></span></div>
-        <div class="lodge-sub">Até 5 hóspedes · 2 diárias</div>
+        <div class="lodge-head"><span class="lodge-name" data-en="Apartment in a Gated Community">Apartamento em Condomínio</span><span class="lodge-price">≈ R$ 770<small>2 noites</small></span></div>
+        <div class="lodge-sub" data-en="Up to 5 guests · 2 nights">Até 5 hóspedes · 2 diárias</div>
         <div class="lodge-foot"><span class="rating"><span class="star">★</span> 4,92<small>/5</small></span><span class="go"><span class="src">Airbnb</span> ver e reservar ›</span></div>
       </a>
 
       <a class="lodge a anim" href="https://www.airbnb.com.br/rooms/1218236876096440531?check_in=2026-08-21&check_out=2026-08-23&guests=1&adults=2&s=67&unique_share_id=ba02f61b-3be4-464f-b78e-a57097b72ef0" target="_blank" rel="noopener">
-        <div class="lodge-head"><span class="lodge-name">Casa com Churrasqueira</span><span class="lodge-price">≈ R$ 870<small>2 noites</small></span></div>
-        <div class="lodge-sub">Até 8 hóspedes · 2 diárias</div>
+        <div class="lodge-head"><span class="lodge-name" data-en="House with Barbecue">Casa com Churrasqueira</span><span class="lodge-price">≈ R$ 870<small>2 noites</small></span></div>
+        <div class="lodge-sub" data-en="Up to 8 guests · 2 nights">Até 8 hóspedes · 2 diárias</div>
         <div class="lodge-foot"><span class="rating"><span class="star">★</span> 4,82<small>/5</small></span><span class="go"><span class="src">Airbnb</span> ver e reservar ›</span></div>
       </a>
 
       <a class="lodge a anim" href="https://www.airbnb.com.br/rooms/1323355408152386611?check_in=2026-08-21&check_out=2026-08-23&guests=1&adults=2&s=67&unique_share_id=aaef8755-c61b-4494-8fb3-308dea3f1f41" target="_blank" rel="noopener">
-        <div class="lodge-head"><span class="lodge-name">Casa de Campo <span style="font-weight:500;font-size:15px;font-style:italic;">(15 min de Botelhos)</span></span><span class="lodge-price">≈ R$ 1.200<small>2 noites</small></span></div>
-        <div class="lodge-sub">Até 12 hóspedes · 2 diárias</div>
+        <div class="lodge-head"><span class="lodge-name" data-en="Country House <span style='font-weight:500;font-size:15px;font-style:italic;'>(15 min from Botelhos)</span>">Casa de Campo <span style="font-weight:500;font-size:15px;font-style:italic;">(15 min de Botelhos)</span></span><span class="lodge-price">≈ R$ 1.200<small>2 noites</small></span></div>
+        <div class="lodge-sub" data-en="Up to 12 guests · 2 nights">Até 12 hóspedes · 2 diárias</div>
         <div class="lodge-foot"><span class="rating none">sem avaliação ainda</span><span class="go"><span class="src">Airbnb</span> ver e reservar ›</span></div>
       </a>
 
     </div>
 
     <!-- ===== NOTA DE RODAPÉ ===== -->
-    <p class="closing anim">
+    <p class="closing anim" data-en="For other options that better suit each guest's needs, we also suggest checking <strong>Airbnb</strong>, <strong>Trivago</strong> or <strong>Booking</strong>.<br><br>The city of <strong>Poços de Caldas</strong> is close to Botelhos and offers more options for lodging, restaurants and other services.">
       Para outras alternativas que atendam melhor às necessidades de cada convidado,
       sugerimos verificar também os sites <strong>Airbnb</strong>, <strong>Trivago</strong> ou <strong>Booking</strong>.
       <br><br>
@@ -521,23 +543,64 @@
   <div class="back-btn-wrap">
     <a class="back-btn" href="index.html">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15,18 9,12 15,6"/></svg>
-      Voltar ao convite
+      <span data-en="Back to invitation">Voltar ao convite</span>
     </a>
   </div>
 
   <footer class="footer">
-    <div class="fname">50 anos</div>
-    <div class="fsub">Luciano de Andrade · 22.08.2026</div>
+    <div class="fname" data-en="50 Years">50 anos</div>
+    <div class="fsub" data-en="Luciano de Andrade · Aug 22, 2026">Luciano de Andrade · 22.08.2026</div>
   </footer>
 </main>
 
-<button class="totop" id="totop" type="button" aria-label="Voltar ao topo da página">
+<button class="totop" id="totop" type="button" aria-label="Voltar ao topo da página" data-en-aria="Back to top of page">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6,15 12,9 18,15"/></svg>
 </button>
 
 <script>
 var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 var RAF = window.requestAnimationFrame || function(f){ return setTimeout(f, 16); };
+
+// ---------- Idioma (PT/EN) ----------
+window.__i18nHooks = [];
+(function(){
+  function pick(){
+    try{ var s = localStorage.getItem('lang'); if(s === 'pt' || s === 'en') return s; }catch(e){}
+    var n = (navigator.language || '').toLowerCase();
+    return n.indexOf('pt') === 0 ? 'pt' : 'en';
+  }
+  window.LANG = pick();
+  window.setLang = function(l){
+    window.LANG = (l === 'en') ? 'en' : 'pt';
+    var en = (window.LANG === 'en');
+    try{ localStorage.setItem('lang', window.LANG); }catch(e){}
+    document.documentElement.lang = en ? 'en' : 'pt-BR';
+    document.querySelectorAll('[data-en]').forEach(function(el){
+      if(el.__pt === undefined) el.__pt = el.innerHTML;
+      el.innerHTML = en ? el.getAttribute('data-en') : el.__pt;
+    });
+    document.querySelectorAll('[data-en-aria]').forEach(function(el){
+      if(el.__ptAria === undefined) el.__ptAria = el.getAttribute('aria-label') || '';
+      el.setAttribute('aria-label', en ? el.getAttribute('data-en-aria') : el.__ptAria);
+    });
+    document.querySelectorAll('.lang-btn').forEach(function(b){
+      b.setAttribute('aria-pressed', b.getAttribute('data-lang') === window.LANG ? 'true' : 'false');
+    });
+    window.__i18nHooks.forEach(function(fn){ try{ fn(window.LANG); }catch(e){} });
+  };
+  // textos repetidos / dinâmicos dos cartões
+  window.__i18nHooks.push(function(lang){
+    var en = (lang === 'en');
+    document.querySelectorAll('.lodge-price small').forEach(function(s){ s.textContent = en ? '2 nights' : '2 noites'; });
+    document.querySelectorAll('.go').forEach(function(g){
+      var last = g.lastChild;
+      if(last && last.nodeType === 3) last.nodeValue = en ? ' view and book ›' : ' ver e reservar ›';
+    });
+    document.querySelectorAll('.rating.none').forEach(function(r){ r.textContent = en ? 'no rating yet' : 'sem avaliação ainda'; });
+    document.querySelectorAll('.tag-top').forEach(function(t){ t.textContent = en ? '★ Highly rated' : '★ Muito bem avaliado'; });
+    document.querySelectorAll('.tag-value').forEach(function(t){ t.textContent = en ? 'Great value' : 'Mais em conta'; });
+  });
+})();
 
 function formatBRL(n){
   n = Math.round(n);
@@ -766,6 +829,14 @@ function countUpAmt(el){
     ring.style.transform = 'translate(' + rx + 'px,' + ry + 'px) translate(-50%,-50%)';
     requestAnimationFrame(loop);
   })();
+})();
+
+// ---------- Botões de idioma + aplicação inicial ----------
+(function(){
+  document.querySelectorAll('.lang-btn').forEach(function(b){
+    b.addEventListener('click', function(){ setLang(b.getAttribute('data-lang')); });
+  });
+  setLang(window.LANG);
 })();
 </script>
 </body>
