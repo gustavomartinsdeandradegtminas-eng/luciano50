@@ -188,6 +188,11 @@
     color:var(--green-soft); line-height:1.15; margin-top:1px; }
   html[lang="en"] .lodge-usd{ display:block; }   /* dólar só no modo inglês */
 
+  /* ===== selo de categoria (hotéis premium — no lugar do preço) ===== */
+  .lodge-price .tier{ display:inline-block; font-family:'Montserrat',sans-serif;
+    font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#7a5a1e;
+    background:rgba(201,169,110,.22); border:1px solid rgba(201,169,110,.55); border-radius:999px; padding:4px 11px; }
+
   /* ===== cartão "ver mais opções" (busca ao vivo) ===== */
   .lodge-more{
     display:flex; align-items:center; gap:14px; text-decoration:none; color:inherit; position:relative;
@@ -476,6 +481,24 @@
         <div class="lodge-head"><span class="lodge-name">Hotel Villa Fiori</span><span class="lodge-price">≈ R$ 950<small>2 noites</small></span></div>
         <div class="lodge-sub">Praça Dom Pedro II, 184 · CEP 37701-035 · Poços de Caldas</div>
         <div class="lodge-foot"><span class="rating"><span class="star">★</span> 9,2<small>/10</small></span><span class="go"><span class="src">Trivago</span> ver e reservar ›</span></div>
+      </a>
+
+      <a class="lodge h anim" href="https://www.booking.com/searchresults.pt-br.html?ss=Palace+Hotel+Po%C3%A7os+de+Caldas&checkin=2026-08-22&checkout=2026-08-23&group_adults=2" target="_blank" rel="noopener">
+        <div class="lodge-head"><span class="lodge-name">Palace Hotel</span><span class="lodge-price"><span class="tier" data-en="Luxury">Luxo</span></span></div>
+        <div class="lodge-sub" data-en="Historic and sophisticated · downtown">Histórico e sofisticado · no centro</div>
+        <div class="lodge-foot"><span class="rating"><span class="star">★</span> <span data-en="Top quality">Alto padrão</span></span><span class="go"><span class="src">Booking</span> ver e reservar ›</span></div>
+      </a>
+
+      <a class="lodge h anim" href="https://www.booking.com/searchresults.pt-br.html?ss=Monreale+Resort+Po%C3%A7os+de+Caldas&checkin=2026-08-22&checkout=2026-08-23&group_adults=2" target="_blank" rel="noopener">
+        <div class="lodge-head"><span class="lodge-name">Monreale Resort</span><span class="lodge-price"><span class="tier" data-en="Resort">Resort</span></span></div>
+        <div class="lodge-sub" data-en="Resort with water park · all-inclusive">Resort com parque aquático · all-inclusive</div>
+        <div class="lodge-foot"><span class="rating"><span class="star">★</span> <span data-en="Top quality">Alto padrão</span></span><span class="go"><span class="src">Booking</span> ver e reservar ›</span></div>
+      </a>
+
+      <a class="lodge h anim" href="https://www.booking.com/searchresults.pt-br.html?ss=Golden+Park+Po%C3%A7os+de+Caldas&checkin=2026-08-22&checkout=2026-08-23&group_adults=2" target="_blank" rel="noopener">
+        <div class="lodge-head"><span class="lodge-name">Golden Park Poços de Caldas</span><span class="lodge-price"><span class="tier" data-en="All-inclusive">All-inclusive</span></span></div>
+        <div class="lodge-sub" data-en="All-inclusive on the hilltop · mountain views">All-inclusive no alto da serra · vista das montanhas</div>
+        <div class="lodge-foot"><span class="rating"><span class="star">★</span> <span data-en="Top quality">Alto padrão</span></span><span class="go"><span class="src">Booking</span> ver e reservar ›</span></div>
       </a>
 
     </div>
