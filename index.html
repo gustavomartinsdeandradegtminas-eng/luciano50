@@ -855,6 +855,16 @@ window.__i18nHooks = [];
   maybe();
 })();
 
+// ---------- Rede de segurança do hero (garante que o título/nome nunca fique invisível) ----------
+(function(){
+  var els = [].slice.call(document.querySelectorAll('.hero-text > *'));
+  var frame = document.querySelector('.hero-frame'); if(frame) els.push(frame);
+  function ensure(){ els.forEach(function(el){ if(getComputedStyle(el).opacity !== '1'){ el.style.opacity = '1'; el.style.transform = 'none'; el.style.filter = 'none'; } }); }
+  window.addEventListener('load', function(){ setTimeout(ensure, 2000); });
+  setTimeout(ensure, 3200);
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden) setTimeout(ensure, 1600); });
+})();
+
 // ---------- Reveal ao scroll ----------
 (function(){
   var els = document.querySelectorAll('.anim');
