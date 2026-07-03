@@ -510,6 +510,17 @@
   .seal.hint{ animation:sealHint 1.5s var(--ease-out) 2; }
   @keyframes sealHint{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.06); } }
 
+  /* ===== link secundário (baixar .ics) ===== */
+  .agenda-alt{ text-align:center; margin:9px 0 0; }
+  .mini-link{
+    -webkit-appearance:none; appearance:none; background:none; border:0; cursor:pointer;
+    font-family:'Montserrat',sans-serif; font-size:12.5px; font-weight:500; color:var(--green-soft);
+    text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(86,98,77,.4);
+    padding:6px 10px; border-radius:8px; transition:color .2s ease;
+  }
+  @media(hover:hover){ .mini-link:hover{ color:var(--terracotta-deep); } }
+  .mini-link:active{ opacity:.7; }
+
   /* ===== Os Detalhes (cartão essencial — vellum translúcido + topo em arco) ===== */
   .details{
     margin:34px 0 6px; padding:22px 20px 22px; text-align:center; position:relative;
@@ -774,10 +785,13 @@
             <polyline points="15,25 18.5,28.5 25,21.5"/>
           </svg>
         </span>
-        <span class="txt"><span class="t1" data-en="Add to Calendar">Adicionar à Agenda</span><span class="t2" data-en="Save 08/22/2026 to your phone calendar">Salvar 22/08/2026 no calendário do celular</span></span>
+        <span class="txt"><span class="t1" data-en="Add to Calendar">Adicionar à Agenda</span><span class="t2" data-en="Open in Google Calendar (1 tap)">Abrir no Google Agenda (1 toque)</span></span>
         <span class="chev" aria-hidden="true">›</span>
       </button>
     </nav>
+    <div class="agenda-alt anim">
+      <button type="button" class="mini-link" id="btn-ics" data-en="Apple / Outlook: download .ics">Apple / Outlook: baixar .ics</button>
+    </div>
 
   </div>
 
@@ -1128,31 +1142,48 @@ function festejar(qtd){
   })();
 })();
 
-// ---------- Adicionar à agenda (.ics) ----------
+// ---------- Adicionar à agenda (Google Calendar em 1 clique + .ics) ----------
 (function(){
-  var btn = document.getElementById('btn-agenda');
+  var btnG = document.getElementById('btn-agenda');
+  var btnI = document.getElementById('btn-ics');
   function pad(n){ return (n<10?'0':'')+n; }
   function carimbo(d){
     return d.getUTCFullYear()+pad(d.getUTCMonth()+1)+pad(d.getUTCDate())+'T'+
            pad(d.getUTCHours())+pad(d.getUTCMinutes())+pad(d.getUTCSeconds())+'Z';
   }
-  btn.addEventListener('click', function(){
+  function textos(){
     var en = (window.LANG === 'en');
-    var summary = en ? "Luciano's 50th Birthday" : '50 anos do Luciano';
-    var descr = en
-      ? "Celebration of Luciano de Andrade's 50th birthday. Please confirm your attendance on WhatsApp: https://wa.me/5531971527307"
-      : 'Comemoracao dos 50 anos do Luciano de Andrade. Confirme sua presenca pelo WhatsApp: https://wa.me/5531971527307';
-    var alarm = en ? "Tomorrow is Luciano's 50th birthday party!" : 'Amanha e a festa de 50 anos do Luciano!';
-    var location = en ? 'Fazenda Cafezal, Botelhos - MG, Brazil' : 'Fazenda Cafezal, Botelhos - MG';
+    return {
+      summary: en ? "Luciano's 50th Birthday" : '50 anos do Luciano',
+      descr: en
+        ? "Celebration of Luciano de Andrade's 50th birthday. Please confirm your attendance on WhatsApp: https://wa.me/5531971527307"
+        : 'Comemoracao dos 50 anos do Luciano de Andrade. Confirme sua presenca pelo WhatsApp: https://wa.me/5531971527307',
+      alarm: en ? "Tomorrow is Luciano's 50th birthday party!" : 'Amanha e a festa de 50 anos do Luciano!',
+      location: en ? 'Fazenda Cafezal, Botelhos - MG, Brazil' : 'Fazenda Cafezal, Botelhos - MG'
+    };
+  }
+  // Google Agenda (1 clique) — abre o evento já preenchido
+  if(btnG) btnG.addEventListener('click', function(){
+    var t = textos();
+    var url = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
+      + '&text=' + encodeURIComponent(t.summary)
+      + '&dates=20260822T160000/20260822T230000&ctz=America/Sao_Paulo'
+      + '&details=' + encodeURIComponent(t.descr)
+      + '&location=' + encodeURIComponent(t.location);
+    window.open(url, '_blank', 'noopener');
+  });
+  // Baixar .ics (Apple Calendar / Outlook)
+  if(btnI) btnI.addEventListener('click', function(){
+    var t = textos();
     var ics = [
       'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Convite Luciano 50 anos//PT-BR',
       'CALSCALE:GREGORIAN','METHOD:PUBLISH','BEGIN:VEVENT',
       'UID:50anos-luciano-20260822@convite','DTSTAMP:'+carimbo(new Date()),
       'DTSTART:20260822T160000','DTEND:20260822T230000',
-      'SUMMARY:'+summary,
-      'DESCRIPTION:'+descr,
-      'LOCATION:'+location,'BEGIN:VALARM','TRIGGER:-P1D','ACTION:DISPLAY',
-      'DESCRIPTION:'+alarm,'END:VALARM','END:VEVENT','END:VCALENDAR'
+      'SUMMARY:'+t.summary,
+      'DESCRIPTION:'+t.descr,
+      'LOCATION:'+t.location,'BEGIN:VALARM','TRIGGER:-P1D','ACTION:DISPLAY',
+      'DESCRIPTION:'+t.alarm,'END:VALARM','END:VEVENT','END:VCALENDAR'
     ].join('\r\n');
     var ehIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     if(ehIOS){ window.location.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(ics); return; }
