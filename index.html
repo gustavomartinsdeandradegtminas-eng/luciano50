@@ -721,7 +721,7 @@
             <path d="M12 22 v-3 a3 3 0 0 1 3 -3 h11 a3 3 0 0 1 3 3 v3"/>
           </svg>
         </span>
-        <span class="txt"><span class="t1" data-en="Where to Stay">Onde se Hospedar</span><span class="t2" data-en="Hotels and apartments near the party">Hotéis e apartamentos perto da festa</span></span>
+        <span class="txt"><span class="t1" data-en="Where to Stay">Onde se Hospedar</span><span class="t2" data-en="Hotels near the party">Hotéis perto da festa</span></span>
         <span class="chev" aria-hidden="true">›</span>
       </a>
     </nav>
@@ -785,12 +785,12 @@
             <polyline points="15,25 18.5,28.5 25,21.5"/>
           </svg>
         </span>
-        <span class="txt"><span class="t1" data-en="Add to Calendar">Adicionar à Agenda</span><span class="t2" data-en="Open in Google Calendar (1 tap)">Abrir no Google Agenda (1 toque)</span></span>
+        <span class="txt"><span class="t1" data-en="Add to Calendar">Adicionar à Agenda</span><span class="t2" data-en="Save to any calendar app">Salvar em qualquer app de calendário</span></span>
         <span class="chev" aria-hidden="true">›</span>
       </button>
     </nav>
     <div class="agenda-alt anim">
-      <button type="button" class="mini-link" id="btn-ics" data-en="Apple / Outlook: download .ics">Apple / Outlook: baixar .ics</button>
+      <button type="button" class="mini-link" id="btn-gcal" data-en="Prefer Google Calendar? Open here">Prefere o Google Agenda? Abrir aqui</button>
     </div>
 
   </div>
@@ -1144,8 +1144,8 @@ function festejar(qtd){
 
 // ---------- Adicionar à agenda (Google Calendar em 1 clique + .ics) ----------
 (function(){
-  var btnG = document.getElementById('btn-agenda');
-  var btnI = document.getElementById('btn-ics');
+  var btnMain = document.getElementById('btn-agenda');   // universal (.ics — qualquer app)
+  var btnGcal = document.getElementById('btn-gcal');     // Google Agenda (opcional)
   function pad(n){ return (n<10?'0':'')+n; }
   function carimbo(d){
     return d.getUTCFullYear()+pad(d.getUTCMonth()+1)+pad(d.getUTCDate())+'T'+
@@ -1162,18 +1162,8 @@ function festejar(qtd){
       location: en ? 'Fazenda Cafezal, Botelhos - MG, Brazil' : 'Fazenda Cafezal, Botelhos - MG'
     };
   }
-  // Google Agenda (1 clique) — abre o evento já preenchido
-  if(btnG) btnG.addEventListener('click', function(){
-    var t = textos();
-    var url = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
-      + '&text=' + encodeURIComponent(t.summary)
-      + '&dates=20260822T160000/20260822T160000&ctz=America/Sao_Paulo'
-      + '&details=' + encodeURIComponent(t.descr)
-      + '&location=' + encodeURIComponent(t.location);
-    window.open(url, '_blank', 'noopener');
-  });
-  // Baixar .ics (Apple Calendar / Outlook)
-  if(btnI) btnI.addEventListener('click', function(){
+  // .ics — formato universal: funciona em qualquer app de calendário (Apple, Google, Samsung, Outlook…)
+  function baixarIcs(){
     var t = textos();
     var ics = [
       'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Convite Luciano 50 anos//PT-BR',
@@ -1192,7 +1182,19 @@ function festejar(qtd){
     var a = document.createElement('a'); a.href = url; a.download = '50-anos-luciano.ics';
     document.body.appendChild(a); a.click();
     setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(url); }, 1500);
-  });
+  }
+  // Google Agenda (opcional, 1 clique para quem usa)
+  function abrirGoogle(){
+    var t = textos();
+    var url = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
+      + '&text=' + encodeURIComponent(t.summary)
+      + '&dates=20260822T160000/20260822T160000&ctz=America/Sao_Paulo'
+      + '&details=' + encodeURIComponent(t.descr)
+      + '&location=' + encodeURIComponent(t.location);
+    window.open(url, '_blank', 'noopener');
+  }
+  if(btnMain) btnMain.addEventListener('click', baixarIcs);
+  if(btnGcal) btnGcal.addEventListener('click', abrirGoogle);
 })();
 
 // ---------- Botões de idioma + aplicação inicial ----------
