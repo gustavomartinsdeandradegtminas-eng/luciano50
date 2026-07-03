@@ -1167,7 +1167,7 @@ function festejar(qtd){
     var t = textos();
     var url = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
       + '&text=' + encodeURIComponent(t.summary)
-      + '&dates=20260822T160000/20260822T230000&ctz=America/Sao_Paulo'
+      + '&dates=20260822T160000/20260822T160000&ctz=America/Sao_Paulo'
       + '&details=' + encodeURIComponent(t.descr)
       + '&location=' + encodeURIComponent(t.location);
     window.open(url, '_blank', 'noopener');
@@ -1179,7 +1179,7 @@ function festejar(qtd){
       'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Convite Luciano 50 anos//PT-BR',
       'CALSCALE:GREGORIAN','METHOD:PUBLISH','BEGIN:VEVENT',
       'UID:50anos-luciano-20260822@convite','DTSTAMP:'+carimbo(new Date()),
-      'DTSTART:20260822T160000','DTEND:20260822T230000',
+      'DTSTART:20260822T160000',
       'SUMMARY:'+t.summary,
       'DESCRIPTION:'+t.descr,
       'LOCATION:'+t.location,'BEGIN:VALARM','TRIGGER:-P1D','ACTION:DISPLAY',
