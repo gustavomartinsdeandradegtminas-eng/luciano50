@@ -566,30 +566,65 @@
 
   /* ===== aviso de último dia p/ confirmação ===== */
   .urgent-banner{
-    position:sticky; top:0; z-index:9990; display:flex; align-items:center; gap:11px;
-    padding:12px 42px 12px 16px; text-align:left;
-    background:linear-gradient(100deg, var(--terracotta-deep), var(--terracotta));
-    box-shadow:0 6px 18px rgba(80,60,35,.3);
-    animation:ubSlide .5s var(--ease-out) both;
+    position:sticky; top:0; z-index:9990; display:flex; align-items:center; gap:12px;
+    padding:13px 46px 13px 18px; text-align:left; overflow:hidden;
+    background:linear-gradient(105deg, var(--terracotta-deep), var(--terracotta) 60%, #bd7440);
+    border-bottom:1px solid rgba(255,255,255,.28);
+    box-shadow:0 8px 22px rgba(80,60,35,.34), inset 0 -1px 0 rgba(0,0,0,.08);
+    animation:ubSlide .55s var(--ease-out) both;
   }
   .urgent-banner[hidden]{ display:none; }
-  .ub-icon{ flex:0 0 auto; font-size:19px; line-height:1; animation:ubPulse 1.7s ease-in-out infinite; }
-  .ub-txt{ flex:1 1 auto; font-family:'Cormorant Garamond',serif; font-weight:700; font-style:italic; font-size:15px; line-height:1.28; color:#fff; }
+  .urgent-banner::before{
+    content:''; position:absolute; top:0; left:0; width:50%; height:100%; z-index:0;
+    background:linear-gradient(105deg, transparent, rgba(255,255,255,.22), transparent);
+    transform:translateX(-140%) skewX(-16deg); pointer-events:none;
+    animation:ubShine 2.4s ease-in-out .6s 1;
+  }
+  .ub-icon-wrap{
+    flex:0 0 auto; width:36px; height:36px; border-radius:50%; position:relative; z-index:1;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(255,255,255,.16); box-shadow:inset 0 1px 0 rgba(255,255,255,.4), 0 3px 8px rgba(0,0,0,.16);
+  }
+  .ub-icon-wrap::after{
+    content:''; position:absolute; inset:-4px; border-radius:50%; border:1.5px solid rgba(255,255,255,.55);
+    animation:ubRing 1.8s ease-out infinite;
+  }
+  .ub-icon-wrap svg{ width:18px; height:18px; display:block; position:relative; z-index:1; }
+  .ub-txt{
+    flex:1 1 auto; position:relative; z-index:1; min-width:0;
+    font-family:'Cormorant Garamond',serif; font-weight:600; font-style:italic; font-size:15.5px;
+    line-height:1.3; color:#fff; text-shadow:0 1px 3px rgba(0,0,0,.12);
+  }
+  .ub-txt strong{ font-weight:800; text-decoration-line:underline; text-decoration-color:rgba(255,255,255,.55); text-underline-offset:3px; }
   .ub-cta{
-    flex:0 0 auto; font-family:'Montserrat',sans-serif; font-weight:700; font-size:11px;
-    letter-spacing:.05em; text-transform:uppercase; color:var(--terracotta-deep);
-    background:#fff; padding:8px 13px; border-radius:999px; text-decoration:none; white-space:nowrap;
-    box-shadow:0 3px 9px rgba(0,0,0,.2);
+    flex:0 0 auto; position:relative; z-index:1; display:inline-flex; align-items:center; gap:4px;
+    font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:700; font-size:15px;
+    color:var(--terracotta-deep); background:#fff; padding:8px 15px 8px 16px; border-radius:999px;
+    text-decoration:none; white-space:nowrap; box-shadow:0 4px 11px rgba(0,0,0,.24);
+    transition:transform .2s var(--ease-out), box-shadow .2s ease;
+  }
+  .ub-cta .ub-chev{ font-size:16px; line-height:1; transition:transform .2s var(--ease-out); }
+  .ub-cta:active{ transform:scale(.96); }
+  @media(hover:hover){
+    .ub-cta:hover{ transform:translateY(-1px); box-shadow:0 7px 16px rgba(0,0,0,.3); }
+    .ub-cta:hover .ub-chev{ transform:translateX(3px); }
   }
   .ub-close{
-    position:absolute; top:6px; right:8px; -webkit-appearance:none; appearance:none;
-    background:transparent; border:0; color:rgba(255,255,255,.85); font-size:19px; line-height:1;
-    cursor:pointer; padding:6px; border-radius:50%;
+    position:absolute; top:11px; right:10px; z-index:2; -webkit-appearance:none; appearance:none;
+    background:rgba(255,255,255,.12); border:0; color:rgba(255,255,255,.9); font-size:18px; line-height:1;
+    width:26px; height:26px; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; border-radius:50%; transition:background .2s ease, color .2s ease;
   }
-  @media(hover:hover){ .ub-close:hover{ color:#fff; background:rgba(255,255,255,.16); } }
-  @keyframes ubPulse{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.18); } }
+  @media(hover:hover){ .ub-close:hover{ color:#fff; background:rgba(255,255,255,.24); } }
+  @keyframes ubRing{ 0%{ transform:scale(.8); opacity:.9; } 100%{ transform:scale(1.55); opacity:0; } }
   @keyframes ubSlide{ from{ transform:translateY(-100%); opacity:0; } to{ transform:translateY(0); opacity:1; } }
-  @media(max-width:380px){ .ub-cta{ display:none; } }
+  @keyframes ubShine{ to{ transform:translateX(220%) skewX(-16deg); } }
+  @media(prefers-reduced-motion:reduce){ .ub-icon-wrap::after{ animation:none; } .urgent-banner::before{ animation:none; } }
+  @media(max-width:460px){
+    .urgent-banner{ flex-wrap:wrap; padding:12px 42px 12px 16px; }
+    .ub-txt{ font-size:14px; }
+    .ub-cta{ flex-basis:100%; width:100%; justify-content:center; margin-top:2px; font-size:14px; box-sizing:border-box; }
+  }
 
   /* ===== seletor de idioma (PT/EN) ===== */
   .lang{
@@ -597,6 +632,7 @@
     background:rgba(247,236,218,.92); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
     border:1px solid rgba(201,169,110,.6); border-radius:999px; padding:3px;
     box-shadow:0 4px 14px rgba(80,60,35,.22);
+    transition:top .25s var(--ease-out);
   }
   .lang-btn{
     -webkit-appearance:none; appearance:none; cursor:pointer; border:0; background:transparent;
@@ -648,9 +684,13 @@
 <div class="progress" id="progress" aria-hidden="true"></div>
 
 <div class="urgent-banner" id="urgentBanner" role="alert" hidden>
-  <span class="ub-icon" aria-hidden="true">⏰</span>
-  <span class="ub-txt" data-en="Today is the last day to confirm your attendance!">Hoje é o último dia para confirmar sua presença!</span>
-  <a class="ub-cta" href="https://wa.me/5531971527307?text=Ol%C3%A1!%20Gostaria%20de%20confirmar%20minha%20presen%C3%A7a%20no%20evento%20de%2050%20anos%20do%20Luciano" target="_blank" rel="noopener" data-en="Confirm now">Confirmar agora</a>
+  <span class="ub-icon-wrap" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><polyline points="12,7.5 12,12 15.5,14"/></svg>
+  </span>
+  <span class="ub-txt" data-en="Today is the <strong>last day</strong> to confirm your attendance!">Hoje é o <strong>último dia</strong> para confirmar sua presença!</span>
+  <a class="ub-cta" href="https://wa.me/5531971527307?text=Ol%C3%A1!%20Gostaria%20de%20confirmar%20minha%20presen%C3%A7a%20no%20evento%20de%2050%20anos%20do%20Luciano" target="_blank" rel="noopener">
+    <span data-en="Confirm now">Confirmar agora</span><span class="ub-chev" aria-hidden="true">›</span>
+  </a>
   <button type="button" class="ub-close" aria-label="Fechar aviso" data-en-aria="Close notice">&times;</button>
 </div>
 
@@ -997,6 +1037,17 @@ window.__i18nHooks = [];
 (function(){
   var banner = document.getElementById('urgentBanner');
   if(!banner) return;
+  var langEl = document.querySelector('.lang');
+
+  function posicionarLang(){
+    if(!langEl) return;
+    if(!banner.hidden){
+      langEl.style.top = (banner.getBoundingClientRect().height + 10) + 'px';
+    } else {
+      langEl.style.top = '';
+    }
+  }
+
   var prazo = new Date(2026, 7, 3, 0, 0, 0);
   var fimPrazo = new Date(2026, 7, 3, 23, 59, 59);
   var agora = new Date();
@@ -1004,13 +1055,22 @@ window.__i18nHooks = [];
   var fechado = false;
   try{ fechado = sessionStorage.getItem('ubClosed') === '1'; }catch(e){}
   if(ultimoDia && !fechado){ banner.hidden = false; }
+  posicionarLang();
+
   var closeBtn = banner.querySelector('.ub-close');
   if(closeBtn){
     closeBtn.addEventListener('click', function(){
       banner.hidden = true;
       try{ sessionStorage.setItem('ubClosed','1'); }catch(e){}
+      posicionarLang();
     });
   }
+
+  var resizeTimer = null;
+  window.addEventListener('resize', function(){
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(posicionarLang, 120);
+  });
 })();
 
 // ---------- Barra de progresso + parallax + indicador de scroll ----------
